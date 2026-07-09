@@ -1,0 +1,17 @@
+# Stage 1: Build with Maven
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY pom.xml .
+# Download dependencies first to leverage Docker cache
+RUN mvn dependency:go-offline -B
+COPY src ./src
+# Build the application, skipping tests to speed up the process
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run with lightweight JRE
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+# Copy the compiled jar file from the build stage
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]

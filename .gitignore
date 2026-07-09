@@ -1,0 +1,30 @@
+# --- 統一フルスタック無視ルール ---
+
+# 1. コンパイル・ビルド生成物（必ず無視する）
+target/
+dist/
+dist-ssr/
+node_modules/
+*.class
+*.jar
+*.war
+
+# 2. IDE・ローカルエディタ設定（必ずコミットしない）
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.settings/
+.project
+.classpath
+
+# 3. OS が生成するキャッシュファイル
+.DS_Store
+Thumbs.db
+
+# 4. ログ・環境変数ファイル
+*.log
+.env
+.env.*
+!.env.example
