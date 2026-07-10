@@ -118,7 +118,7 @@ stderr | src/__tests__/ResultPage.test.tsx > ResultPage > ST-009: should fetch a
 ... [Spring/Hibernate SQL Logs Truncated] ...
 [INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.305 s -- in com.example.carinsurance.controller.QuoteControllerIT
 [INFO] Running com.example.carinsurance.domain.dto.QuoteRequestTest
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.302 s -- in com.example.carinsurance.domain.dto.QuoteRequestTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.302 s -- in com.example.carinsurance.domain.dto.QuoteRequestTest
 [INFO] Running com.example.carinsurance.domain.service.calculation.QuoteCalculationServiceTest
 [INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.329 s -- in com.example.carinsurance.domain.service.calculation.QuoteCalculationServiceTest
 [INFO] Running com.example.carinsurance.domain.service.QuoteServiceTest
