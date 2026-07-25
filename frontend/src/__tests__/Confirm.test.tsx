@@ -17,10 +17,20 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const methods = useForm({
     defaultValues: {
       driverAge: 35,
+      licenseColor: 'GOLD',
+      usageType: 'PRIVATE',
+      annualMileage: 5000,
+      driverRange: 'SELF',
       hasCurrentInsurance: false,
       maker: 'TOYOTA',
       carName: 'PRIUS',
-      propertyDamageLimit: 'UNLIMITED'
+      firstRegistrationYearMonth: '2024-01',
+      vehicleType: 'COMPACT',
+      vehicleInsurance: true,
+      propertyDamageLimit: 'UNLIMITED',
+      personalInjuryAmount: 'THIRTY_MILLION',
+      lawyerOption: false,
+      roadService: false
     }
   });
 

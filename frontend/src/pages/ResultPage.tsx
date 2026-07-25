@@ -3,6 +3,24 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { quoteApi } from '../api/client';
 import { QuoteResponse } from '../api/types';
 
+const itemTranslations: Record<string, string> = {
+  GOLD: 'ゴールド',
+  BLUE: 'ブルー',
+  GREEN: 'グリーン',
+  PRIVATE: '日常・レジャー',
+  COMMUTE: '通勤・通学',
+  BUSINESS: '業務',
+  SELF: '本人のみ',
+  COUPLE: '本人・配偶者',
+  FAMILY: '同居の親族',
+  ANYONE: '限定なし',
+  COMPACT: 'コンパクト',
+  SEDAN: 'セダン',
+  MINIVAN: 'ミニバン',
+  SUV: 'SUV',
+  KEI: '軽自動車'
+};
+
 export const ResultPage: React.FC = () => {
   const { quoteNo } = useParams();
   const navigate = useNavigate();
@@ -44,7 +62,7 @@ export const ResultPage: React.FC = () => {
           <tbody>
             {result.breakdowns.map((b, i) => (
               <tr key={i} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                <td style={{ padding: '16px 0', color: 'var(--color-text-main)' }}>{b.itemName}</td>
+                <td style={{ padding: '16px 0', color: 'var(--color-text-main)' }}>{itemTranslations[b.itemName] || b.itemName}</td>
                 <td style={{ padding: '16px 0', textAlign: 'right', fontWeight: 500 }}>
                   {b.rate ? `× ${b.rate.toFixed(3)}` : `+ ${b.amount?.toLocaleString()} 円`}
                 </td>

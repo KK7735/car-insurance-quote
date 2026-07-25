@@ -1,5 +1,14 @@
 import { z } from 'zod';
 
+const booleanRadioSchema = z.preprocess(
+  (val) => {
+    if (val === 'true' || val === true) return true;
+    if (val === 'false' || val === false) return false;
+    return undefined;
+  },
+  z.boolean({ message: '必須項目です' })
+);
+
 export const step1Schema = z.object({
   driverAge: z.number({ message: '18 以上の値にしてください' })
     .min(18, '18 以上の値にしてください')
@@ -13,9 +22,9 @@ export const step1Schema = z.object({
 });
 
 export const step2Schema = z.object({
-  hasCurrentInsurance: z.preprocess((val) => val === 'true' || val === true, z.boolean()),
-  grade: z.number({ message: '数値を入力してください' }).min(1).max(20).optional(),
-  accidentTerm: z.number({ message: '数値を入力してください' }).min(0).max(6).optional()
+  hasCurrentInsurance: booleanRadioSchema,
+  grade: z.number({ message: '数値を入力してください' }).min(1, '1以上の数値を入力してください').max(20, '20以下の数値を入力してください').optional(),
+  accidentTerm: z.number({ message: '数値を入力してください' }).min(0, '0以上の数値を入力してください').max(6, '6以下の数値を入力してください').optional()
 }).superRefine((data, ctx) => {
   // superRefine により複雑なクロスフィールドバリデーション（依存バリデーション）を実現している：「現在加入中の保険がある」が true の場合のみ、等級と事故歴が必須項目となる。
   if (data.hasCurrentInsurance) {
@@ -37,11 +46,11 @@ export const step2Schema = z.object({
 });
 
 export const step3Schema = z.object({
-  maker: z.string().min(1, '必須項目です').max(50, '50文字以内で入力してください'),
-  carName: z.string().min(1, '必須項目です').max(50, '50文字以内で入力してください'),
+  maker: z.string().min(1, 'メーカーを入力してください').max(50, '50文字以内で入力してください').refine(val => val.trim().length > 0, 'メーカーを入力してください'),
+  carName: z.string().min(1, '車名を入力してください').max(50, '50文字以内で入力してください').refine(val => val.trim().length > 0, '車名を入力してください'),
   firstRegistrationYearMonth: z.string().regex(/^\d{4}-\d{2}$/, 'YYYY-MM 形式で入力してください'),
   vehicleType: z.enum(['COMPACT', 'SEDAN', 'MINIVAN', 'SUV', 'KEI'], { message: '必須項目です' }),
-  vehicleInsurance: z.preprocess((val) => val === 'true' || val === true, z.boolean())
+  vehicleInsurance: booleanRadioSchema
 }).superRefine((data, ctx) => {
   // ビジネスルールバリデーション：初度登録年月を未来の時間にすることはできない。Zod のカスタムバリデーションロジックはバックエンドの複雑な判定を完全に代替し、即時的なフロントエンドのフィードバックを提供できる。
   const match = data.firstRegistrationYearMonth.match(/^(\d{4})-(\d{2})$/);
@@ -63,8 +72,8 @@ export const step3Schema = z.object({
 export const step4Schema = z.object({
   propertyDamageLimit: z.enum(['UNLIMITED', 'THIRTY_MILLION'], { message: '必須項目です' }),
   personalInjuryAmount: z.enum(['THIRTY_MILLION', 'FIFTY_MILLION', 'UNLIMITED'], { message: '必須項目です' }),
-  lawyerOption: z.preprocess((val) => val === 'true' || val === true, z.boolean()),
-  roadService: z.preprocess((val) => val === 'true' || val === true, z.boolean())
+  lawyerOption: booleanRadioSchema,
+  roadService: booleanRadioSchema
 });
 
 // Zod の intersection (`and`) を利用して4つのステップの Schema を1つの大きな Schema に組み合わせ、最終的に送信されるデータがすべてのフェーズの制約を満たすことを保証する。

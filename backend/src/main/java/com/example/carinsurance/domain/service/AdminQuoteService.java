@@ -72,6 +72,7 @@ public class AdminQuoteService {
             writer.println("見積番号,運転者年齢,メーカー,車名,年間保険料,作成日時");
 
             List<Quote> quotes = quoteRepository.findAll(Sort.by("createdAt").descending());
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             for (Quote q : quotes) {
                 writer.printf("%s,%d,%s,%s,%d,%s\n",
                         q.getQuoteNo(),
@@ -79,7 +80,7 @@ public class AdminQuoteService {
                         q.getMaker(),
                         q.getCarName(),
                         q.getAnnualPremium(),
-                        q.getCreatedAt().toString()
+                        q.getCreatedAt() != null ? q.getCreatedAt().format(formatter) : ""
                 );
             }
             writer.flush();

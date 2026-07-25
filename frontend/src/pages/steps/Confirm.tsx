@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { quoteApi } from '../../api/client';
-import { QuoteFormValues } from '../../schemas/quoteSchema';
+import { quoteSchema, QuoteFormValues } from '../../schemas/quoteSchema';
 
 const UserIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -40,10 +40,12 @@ const FieldValue: React.FC<{ label: string; value: React.ReactNode; testId: stri
   </div>
 );
 
+const isTrue = (val: any) => val === true || val === 'true';
+
 // 確認画面コンポーネント。これはフォーム送信前の最後の防衛線である。コンテキストで収集されたすべての列挙値とブール値をユーザーフレンドリーな日本語テキストに変換し、API を呼び出して送信する役割を担う。
 export const Confirm: React.FC = () => {
   const navigate = useNavigate();
-  const { getValues } = useFormContext<QuoteFormValues>();
+  const { getValues, trigger } = useFormContext<QuoteFormValues>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,7 +56,16 @@ export const Confirm: React.FC = () => {
       // 送信時にエラー状態をリセットする。API が 400 Bad Request を返した場合（例：バックエンドのバリデーション失敗）、ここでキャッチされ、具体的なフィールドのエラー情報が表示される。
       setLoading(true);
       setError(null);
-      const res = await quoteApi.createQuote(values);
+
+      const isValid = await trigger();
+      if (!isValid) {
+        setError('入力内容に不備があります。各ステップに戻って内容を修正してください。');
+        setLoading(false);
+        return;
+      }
+
+      const parsedValues = quoteSchema.parse(values);
+      const res = await quoteApi.createQuote(parsedValues);
       navigate(`/result/${res.quoteNo}`);
     } catch (e: any) {
       if (e.response?.data?.details) {
@@ -73,7 +84,7 @@ export const Confirm: React.FC = () => {
     <div>
       <h2 style={{ marginBottom: 8, color: 'var(--color-primary)' }}>入力内容の確認</h2>
       <p style={{ fontSize: '14px', color: '#4B5563', marginBottom: '24px' }}>入力内容をご確認ください。修正が必要な場合は「内容を修正する」ボタンを押してください。</p>
-      
+
       {error && (
         <div style={{ color: 'var(--color-error)', padding: 16, backgroundColor: '#FEF2F2', borderRadius: 8, marginBottom: 24 }}>
           {error}
@@ -94,13 +105,9 @@ export const Confirm: React.FC = () => {
       <div style={cardStyle}>
         <CardHeader icon={<ShieldIcon />} title="2. 契約中保険" />
         <div style={gridStyle}>
-          <FieldValue testId="field-hasCurrentInsurance" label="現在加入有無" value={values.hasCurrentInsurance ? 'あり' : 'なし'} />
-          {values.hasCurrentInsurance && (
-            <>
-              <FieldValue testId="field-grade" label="等級" value={`${values.grade} 等級`} />
-              <FieldValue testId="field-accidentTerm" label="事故有係数期間" value={`${values.accidentTerm} 年`} />
-            </>
-          )}
+          <FieldValue testId="field-hasCurrentInsurance" label="現在加入有無" value={isTrue(values.hasCurrentInsurance) ? 'あり' : 'なし'} />
+          <FieldValue testId="field-grade" label="等級" value={isTrue(values.hasCurrentInsurance) ? `${values.grade} 等級` : '-'} />
+          <FieldValue testId="field-accidentTerm" label="事故有係数期間" value={isTrue(values.hasCurrentInsurance) ? `${values.accidentTerm} 年` : '-'} />
         </div>
       </div>
 
@@ -111,7 +118,7 @@ export const Confirm: React.FC = () => {
           <FieldValue testId="field-carName" label="車名" value={values.carName} />
           <FieldValue testId="field-firstRegistrationYearMonth" label="初度登録年月" value={values.firstRegistrationYearMonth} />
           <FieldValue testId="field-vehicleType" label="車両タイプ" value={{ COMPACT: 'コンパクト', SEDAN: 'セダン', MINIVAN: 'ミニバン', SUV: 'SUV', KEI: '軽自動車' }[values.vehicleType]} />
-          <FieldValue testId="field-vehicleInsurance" label="車両保険" value={values.vehicleInsurance ? 'あり' : 'なし'} />
+          <FieldValue testId="field-vehicleInsurance" label="車両保険" value={isTrue(values.vehicleInsurance) ? 'あり' : 'なし'} />
         </div>
       </div>
 
@@ -121,8 +128,8 @@ export const Confirm: React.FC = () => {
           <FieldValue testId="field-bodilyInjury" label="対人賠償" value="無制限" />
           <FieldValue testId="field-propertyDamageLimit" label="対物賠償" value={{ UNLIMITED: '無制限', THIRTY_MILLION: '3000万円' }[values.propertyDamageLimit]} />
           <FieldValue testId="field-personalInjuryAmount" label="人身傷害" value={{ THIRTY_MILLION: '3000万円', FIFTY_MILLION: '5000万円', UNLIMITED: '無制限' }[values.personalInjuryAmount]} />
-          <FieldValue testId="field-lawyerOption" label="弁護士特約" value={values.lawyerOption ? 'あり' : 'なし'} />
-          <FieldValue testId="field-roadService" label="ロードサービス" value={values.roadService ? 'あり' : 'なし'} />
+          <FieldValue testId="field-lawyerOption" label="弁護士特約" value={isTrue(values.lawyerOption) ? 'あり' : 'なし'} />
+          <FieldValue testId="field-roadService" label="ロードサービス" value={isTrue(values.roadService) ? 'あり' : 'なし'} />
         </div>
       </div>
 

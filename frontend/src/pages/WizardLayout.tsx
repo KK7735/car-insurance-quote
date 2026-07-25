@@ -21,13 +21,7 @@ export const WizardLayout: React.FC = () => {
   const methods = useForm<QuoteFormValues>({
     // @ts-expect-error ZodIntersection with ZodEffects typing issue in react-hook-form
     resolver: zodResolver(quoteSchema),
-    mode: 'onTouched',
-    defaultValues: {
-      hasCurrentInsurance: false,
-      vehicleInsurance: false,
-      lawyerOption: false,
-      roadService: false,
-    }
+    mode: 'onTouched'
   });
 
   useEffect(() => {

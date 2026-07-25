@@ -6,6 +6,7 @@ interface Quote {
   driverAge: number;
   carName: string;
   annualPremium: number;
+  monthlyPremium: number;
   createdAt: string;
 }
 
@@ -16,6 +17,24 @@ interface QuoteDetail extends Quote {
     amount: number;
   }[];
 }
+
+const itemTranslations: Record<string, string> = {
+  GOLD: 'ゴールド',
+  BLUE: 'ブルー',
+  GREEN: 'グリーン',
+  PRIVATE: '日常・レジャー',
+  COMMUTE: '通勤・通学',
+  BUSINESS: '業務',
+  SELF: '本人のみ',
+  COUPLE: '本人・配偶者',
+  FAMILY: '同居の親族',
+  ANYONE: '限定なし',
+  COMPACT: 'コンパクト',
+  SEDAN: 'セダン',
+  MINIVAN: 'ミニバン',
+  SUV: 'SUV',
+  KEI: '軽自動車'
+};
 
 // 管理者向け見積もりリストコンポーネント。ページは AuthInterceptor によって保護されている（有効なトークンがない場合はログインにリダイレクトされる）。サーバーサイドページネーションとデバウンス検索の設計を実装している。
 const AdminQuoteList: React.FC = () => {
@@ -157,6 +176,7 @@ const AdminQuoteList: React.FC = () => {
             </div>
             <div>
               <p><strong>年間保険料:</strong> ¥{selectedQuote.annualPremium.toLocaleString()}</p>
+              <p><strong>月額保険料:</strong> ¥{selectedQuote.monthlyPremium.toLocaleString()}</p>
               <h4 style={{ marginTop: 24, marginBottom: 12 }}>計算内訳</h4>
               <table className="admin-table">
                 <thead>
@@ -169,7 +189,7 @@ const AdminQuoteList: React.FC = () => {
                 <tbody>
                   {selectedQuote.breakdowns.map((b, i) => (
                     <tr key={i}>
-                      <td>{b.itemName}</td>
+                      <td>{itemTranslations[b.itemName] || b.itemName}</td>
                       <td>{b.rate ? `x${b.rate.toFixed(2)}` : '-'}</td>
                       <td>{b.amount ? `+¥${b.amount.toLocaleString()}` : '-'}</td>
                     </tr>
