@@ -14,7 +14,7 @@
 | UT-008 | 保険詳細バリデーション | OK | `testUT008_InsuranceDetailsValidation_ErrorWhenGradeIsMissing` |
 | UT-009 | 見積番号生成 | OK | `testUT009_QuoteNoGeneration_UniquePerDay` |
 | UT-010 | 見積内訳保存 | OK | `testUT010_QuoteBreakdownSaved` |
-| UT-011 | 初度登録年月検証(独自追加) | OK | `testUT011_FirstRegistrationYearMonthValidation_ErrorWhenFuture` |
+| UT-011 | 初度登録年月検証(追加) | OK | `testUT011_FirstRegistrationYearMonthValidation_ErrorWhenFuture` |
 | IT-001 | POST /api/quotes (見積作成成功) | OK | `testIT001_CreateQuote_Success` |
 | IT-002 | POST /api/quotes (必須エラー) | OK | `testIT002_CreateQuote_MissingRequiredFields_Returns400` |
 | IT-003 | GET /api/quotes/{quoteNo} (取得成功) | OK | `testIT003_GetQuote_ExistingQuoteNo_Returns200` |

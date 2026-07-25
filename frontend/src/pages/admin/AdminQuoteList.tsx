@@ -68,7 +68,7 @@ const AdminQuoteList: React.FC = () => {
   const handleDownloadCsv = async () => {
     try {
       // CSV ファイルのダウンロード処理。responseType: 'blob' を明示的に設定する必要がある。そうしないと Axios はデフォルトで JSON として処理し、バイナリストリームが破損してダウンロードしたファイルが開けなくなる。
-      const res = await adminAxios.get('/quotes/csv', { responseType: 'blob' });
+      const res = await adminAxios.get('/quotes.csv', { responseType: 'blob' });
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement('a');
       link.href = url;

@@ -8,7 +8,7 @@ interface FormRadioGroupProps {
 }
 
 export const FormRadioGroup: React.FC<FormRadioGroupProps> = ({ name, label, options }) => {
-  const { register, formState: { errors }, getValues, setValue } = useFormContext();
+  const { register, formState: { errors }, getValues } = useFormContext();
   const error = errors[name]?.message as string;
 
   return (

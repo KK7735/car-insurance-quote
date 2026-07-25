@@ -66,7 +66,8 @@
 | **POST** | `/api/admin/login` | 管理者ログイン（Tokenの取得） | 不要 |
 | **GET** | `/api/admin/quotes` | 見積一覧の取得および検索（ページネーション対応） | **要** |
 | **GET** | `/api/admin/quotes/{quoteNo}` | 管理者用：見積詳細の取得 | **要** |
-| **GET** | `/api/admin/quotes/csv` | 見積データの CSV ダウンロード | **要** |
+| **GET** | `/api/admin/quotes.csv` | 見積データの CSV ダウンロード | **要** |
+| **GET** | `/api/master/rates` | 計算に使用する料率マスタ一覧の取得 | **要** |
 
 ---
 
@@ -211,7 +212,7 @@
 
 ---
 
-### 5.6 【管理者用】CSVダウンロード (GET `/api/admin/quotes/csv`)
+### 5.6 【管理者用】CSVダウンロード (GET `/api/admin/quotes.csv`)
 これまでに作成されたすべての見積一覧を CSV 形式で一括ダウンロードします（認証必須）。
 
 - **レスポンスヘッダー**:
@@ -219,6 +220,31 @@
   - `Content-Disposition: attachment; filename="quotes.csv"`
 - **レスポンスデータ**:
   - UTF-8エンコーディングされた CSV ファイルのバイナリストリーム。
+
+---
+
+### 5.7 【管理者用】料率マスタ参照 (GET `/api/master/rates`)
+計算に使用される有効なすべての料率マスタデータを取得します（認証必須）。
+
+- **成功時レスポンス (HTTP 200 OK)**:
+  ```json
+  [
+    {
+      "category": "AGE",
+      "itemCode": "18_25",
+      "itemName": "18〜25歳",
+      "rate": 1.600,
+      "amount": null
+    },
+    {
+      "category": "VEHICLE_INSURANCE",
+      "itemCode": "TRUE",
+      "itemName": "車両保険あり",
+      "rate": null,
+      "amount": 30000
+    }
+  ]
+  ```
 
 ---
 
