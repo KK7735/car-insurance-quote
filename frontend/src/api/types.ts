@@ -40,5 +40,5 @@ export interface ErrorDetails {
 export interface ErrorResponse {
     code: string;
     message: string;
-    details: ErrorDetails | null;
+    errors: ErrorDetails | null;
 }

@@ -70,7 +70,7 @@ public class QuoteControllerITest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code", is("VALIDATION_ERROR")))
-                .andExpect(jsonPath("$.details.driverAge", notNullValue()));
+                .andExpect(jsonPath("$.errors.driverAge", notNullValue()));
     }
 
     @Test

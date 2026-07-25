@@ -76,7 +76,7 @@ public class AdminControllerTest {
     void testIT008_DownloadCsv_WithAuth_Success() throws Exception {
         String token = getAuthToken();
 
-        mockMvc.perform(get("/api/admin/quotes/csv")
+        mockMvc.perform(get("/api/admin/quotes.csv")
                 .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Disposition", containsString("attachment; filename=\"quotes.csv\"")))

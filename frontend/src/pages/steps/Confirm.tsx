@@ -68,8 +68,8 @@ export const Confirm: React.FC = () => {
       const res = await quoteApi.createQuote(parsedValues);
       navigate(`/result/${res.quoteNo}`);
     } catch (e: any) {
-      if (e.response?.data?.details) {
-        setError(JSON.stringify(e.response.data.details));
+      if (e.response?.data?.errors) {
+        setError(JSON.stringify(e.response.data.errors));
       } else {
         setError(e.response?.data?.message || 'システムエラーが発生しました');
       }

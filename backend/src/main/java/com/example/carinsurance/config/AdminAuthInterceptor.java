@@ -32,8 +32,10 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
         }
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.getWriter().write("{\"message\": \"UNAUTHORIZED\"}");
+        response.setContentType("application/json;charset=UTF-8");
+        com.example.carinsurance.domain.exception.ErrorResponse errorResponse = 
+            new com.example.carinsurance.domain.exception.ErrorResponse("UNAUTHORIZED", "管理者認証が必要です", null);
+        response.getWriter().write(new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(errorResponse));
         return false;
     }
 }

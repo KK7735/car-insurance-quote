@@ -65,7 +65,7 @@ public class QuoteRequestTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code", is("VALIDATION_ERROR")))
-                .andExpect(jsonPath("$.details.driverAge", notNullValue()));
+                .andExpect(jsonPath("$.errors.driverAge", notNullValue()));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class QuoteRequestTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code", is("VALIDATION_ERROR")))
-                .andExpect(jsonPath("$.details.insuranceDetailsValid", notNullValue()));
+                .andExpect(jsonPath("$.errors.insuranceDetailsValid", notNullValue()));
     }
 
     @Test
@@ -94,6 +94,6 @@ public class QuoteRequestTest {
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code", is("VALIDATION_ERROR")))
-                .andExpect(jsonPath("$.details.firstRegistrationYearMonthValid", notNullValue()));
+                .andExpect(jsonPath("$.errors.firstRegistrationYearMonthValid", notNullValue()));
     }
 }
